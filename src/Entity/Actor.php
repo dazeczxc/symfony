@@ -21,9 +21,13 @@ class Actor
     #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'actors')]
     private Collection $no;
 
+    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'actors')]
+    private Collection $movies;
+
     public function __construct()
     {
         $this->no = new ArrayCollection();
+        $this->movies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -46,27 +50,28 @@ class Actor
     /**
      * @return Collection<int, Movie>
      */
-    public function getNo(): Collection
+    public function getMovies(): Collection
     {
-        return $this->no;
+        return $this->movies;
     }
 
-    public function addNo(Movie $no): self
+    public function addMovie(Movie $movie): self
     {
-        if (!$this->no->contains($no)) {
-            $this->no->add($no);
-            $no->addActor($this);
+        if (!$this->movies->contains($movie)) {
+            $this->movies->add($movie);
+            $movie->addActor($this);
         }
 
         return $this;
     }
 
-    public function removeNo(Movie $no): self
+    public function removeMovie(Movie $movie): self
     {
-        if ($this->no->removeElement($no)) {
-            $no->removeActor($this);
+        if ($this->movies->removeElement($movie)) {
+            $movie->removeActor($this);
         }
 
         return $this;
     }
+
 }
