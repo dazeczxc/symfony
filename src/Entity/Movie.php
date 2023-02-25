@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MovieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
@@ -25,8 +27,13 @@ class Movie
     #[ORM\Column(length: 255)]
     private ?string $imagePath = null;
 
-    #[ORM\Column]
-    private ?int $actors = null;
+    #[ORM\ManyToMany(targetEntity: actor::class, inversedBy: 'no')]
+    private Collection $actors;
+
+    public function __construct()
+    {
+        $this->actors = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -81,27 +88,27 @@ class Movie
         return $this;
     }
 
-    public function getActors(): ?int
+    /**
+     * @return Collection<int, actor>
+     */
+    public function getActors(): Collection
     {
         return $this->actors;
     }
 
-    public function setActors(int $actors): self
+    public function addActor(actor $actor): self
     {
-        $this->actors = $actors;
+        if (!$this->actors->contains($actor)) {
+            $this->actors->add($actor);
+        }
 
         return $this;
     }
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Movie", mappedBy="Actor")
-     */
-    private $Movies;
+    public function removeActor(actor $actor): self
+    {
+        $this->actors->removeElement($actor);
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Actor", inversedBy="Movie")
-     * @ORM\JoinColumn(name="actors", referencedColumnName="id")
-     */
-    private $user;
-
+        return $this;
+    }
 }

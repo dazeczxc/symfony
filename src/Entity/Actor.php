@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ActorRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ActorRepository::class)]
@@ -15,6 +17,14 @@ class Actor
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
+    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'actors')]
+    private Collection $no;
+
+    public function __construct()
+    {
+        $this->no = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -34,7 +44,29 @@ class Actor
     }
 
     /**
-     * @ORM\ManyToMany(targetEntity="Movie", mappedBy="actors")
+     * @return Collection<int, Movie>
      */
-    private $movies;
+    public function getNo(): Collection
+    {
+        return $this->no;
+    }
+
+    public function addNo(Movie $no): self
+    {
+        if (!$this->no->contains($no)) {
+            $this->no->add($no);
+            $no->addActor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNo(Movie $no): self
+    {
+        if ($this->no->removeElement($no)) {
+            $no->removeActor($this);
+        }
+
+        return $this;
+    }
 }
