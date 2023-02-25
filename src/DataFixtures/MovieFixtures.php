@@ -15,6 +15,10 @@ class MovieFixtures extends Fixture
         $movie->setReleaseYear(2010);
         $movie->setDescription('This is the Batman Movie');
         $movie->setImagePath('https://www.pixel4k.com/wp-content/uploads/2019/01/batman-dark-knight-4k_1547506396.jpg');
+        
+        $movie->addActor($this->getReference('actor_1'));
+        $movie->addActor($this->getReference('actor_2'));
+
         $manager->persist($movie);
 
         $movie2 = new Movie();
@@ -22,6 +26,10 @@ class MovieFixtures extends Fixture
         $movie2->setReleaseYear(2023);
         $movie2->setDescription('This is the Spiderman Movie');
         $movie2->setImagePath('https://static.independent.co.uk/s3fs-public/thumbnails/image/2018/07/18/13/the-dark-knight-batman-joker.jpg');
+        
+        $movie2->addActor($this->getReference('actor_3'));
+        $movie2->addActor($this->getReference('actor_4'));
+
         $manager->persist($movie2);
 
         $manager->flush();
