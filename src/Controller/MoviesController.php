@@ -27,11 +27,11 @@ class MoviesController extends AbstractController
         //findOneBy - SELECT * FROM TABLENAME WHERE CONDITIONS ORDER BY ASC/DESC;
         //count() - SELECT COUNT() FROM TABLENAME WHERE CONDITIONS;
 
-        $repository = $this->em->getRepository(Movie::class);
+        //$repository = $this->em->getRepository(Movie::class);
 
-        $movies = $repository->getClassName();
+        //$movies = $repository->getClassName();
 
-        dd($movies);
+        //dd($movies);
         return $this->render('index.html.twig');
     }
 
